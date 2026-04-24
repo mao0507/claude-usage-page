@@ -26,7 +26,7 @@ function broadcastToClients(data: StatsResponse): void {
 }
 
 // Start file watcher and broadcast on change
-watchStats(() => {
+export const stopWatcher = watchStats(() => {
   const updated = buildResponse()
   broadcastToClients(updated)
 })
