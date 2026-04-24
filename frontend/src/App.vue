@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { useStatsStream } from './composables/useStatsStream'
+import { usePlanLimits } from './composables/usePlanLimits'
+import PlanUsageLimits from './components/PlanUsageLimits.vue'
 import PlanUsage from './components/PlanUsage.vue'
 import WeeklyUsage from './components/WeeklyUsage.vue'
 import UsageHeatmap from './components/UsageHeatmap.vue'
@@ -7,6 +9,7 @@ import TodayDetail from './components/TodayDetail.vue'
 import ModelBreakdown from './components/ModelBreakdown.vue'
 
 const { stats, connected } = useStatsStream()
+const { planLimits } = usePlanLimits()
 </script>
 
 <template>
@@ -37,22 +40,7 @@ const { stats, connected } = useStatsStream()
 
     <!-- Dashboard -->
     <main v-else class="max-w-6xl mx-auto px-6 py-6 space-y-6">
-      <!-- Row 1: Plan + Weekly usage -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <PlanUsage
-          :total-messages="stats.totalMessages"
-          :plan-limit="stats.planLimit"
-        />
-        <WeeklyUsage
-          :daily-activity="stats.dailyActivity"
-          :weekly-limit="stats.weeklyLimit"
-        />
-      </div>
-
-      <!-- Row 2: Heatmap full width -->
-      <UsageHeatmap :daily-model-tokens="stats.dailyModelTokens" />
-
-      <!-- Row 3: Today detail + Model breakdown -->
+      <!-- Row 0: Today detail + Model breakdown -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <TodayDetail
           :daily-activity="stats.dailyActivity"
@@ -60,6 +48,28 @@ const { stats, connected } = useStatsStream()
           :hour-counts="stats.hourCounts"
         />
         <ModelBreakdown :model-usage="stats.modelUsage" />
+      </div>
+
+      <!-- Row 1: Heatmap full width -->
+      <UsageHeatmap :daily-model-tokens="stats.dailyModelTokens" />
+
+      <!-- Row 2: Plan usage limits (from claude.ai) — hidden -->
+      <div >
+        <PlanUsageLimits :plan-limits="planLimits" />
+      </div>
+
+      <!-- Row 3: Plan + Weekly usage — hidden -->
+      <div style="display: none;">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <PlanUsage
+            :total-messages="stats.totalMessages"
+            :plan-limit="stats.planLimit"
+          />
+          <WeeklyUsage
+            :daily-activity="stats.dailyActivity"
+            :weekly-limit="stats.weeklyLimit"
+          />
+        </div>
       </div>
     </main>
   </div>
