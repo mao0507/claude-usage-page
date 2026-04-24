@@ -1,5 +1,7 @@
 # Claude Usage Monitor
 
+> 最後更新：2026-04-24
+
 個人 Claude Code 使用量監控儀表板，資料來源為本地 `~/.claude/stats-cache.json` 及 `~/.claude/projects/**/*.jsonl`，不需要任何帳號或網路存取（Plan 用量上限功能除外）。
 
 ## 功能
